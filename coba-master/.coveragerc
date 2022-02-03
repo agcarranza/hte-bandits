@@ -1,0 +1,10 @@
+[run]
+omit =
+    */docs/*
+    */tests/*
+    
+[report]
+exclude_lines =
+    @abstract
+    @overload
+    pragma: no cover
