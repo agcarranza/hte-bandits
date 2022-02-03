@@ -1,0 +1,23 @@
+name: bandit-sim
+channels:
+  - conda-forge
+  - r
+dependencies:
+  # R
+  - r-base==4.0.5
+  - r-grf>=2.0.0
+  - r-policytree>=1.1.0
+  # Python
+  - matplotlib
+  - numpy
+  - pandas
+  - pytest
+  - rpy2==3.4.4
+  - scikit-learn==0.24.2
+  - seaborn
+  - statsmodels
+  - econml
+  - vowpalwabbit
+  - ipython
+  - ipykernel
+  - jupyterlab
