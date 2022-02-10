@@ -1,4 +1,4 @@
-from .learners import IGWBanditLearner, SemiparametricIGWBanditLearner, EpsilonGreedyLearner
+from .learners import IGWBanditLearner, SemiparametricIGWBanditLearner
 
 # __all__ = [
 #     'IGWBanditLearner',
