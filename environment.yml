@@ -21,3 +21,4 @@ dependencies:
   - ipython
   - ipykernel
   - jupyterlab
+  - jax
