@@ -243,7 +243,7 @@ class SemiparametricIGWBanditLearner(Learner):
         self.model.fit(Y=self._Y, T=np.argmax(self._A, axis=1), X=self._X)
 
         if self._do_feature_selection:
-            pseudodim = np.count_nonzero(self.model.coef_) * np.log(self._X.shape[1])
+            pseudodim = np.count_nonzero(self.model.coef__inference) * np.log(self._X.shape[1])
         else:
             pseudodim = self._A.shape[1] * self._X.shape[1]
 
