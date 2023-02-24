@@ -1,3 +1,5 @@
+Run the following instructions to set up the environment. Afterwards refer to the notebook to run experiments in the paper.
+
 ### bandit-coba-sim
 Run bandit simulations with coba
 

@@ -116,6 +116,7 @@ class OnlineOnPolicyEvalTask(EvaluationTask):
             for k,v in interaction.kwargs.items():
                 if isinstance(v,collections.abc.Sequence) and not isinstance(v,str):
                     interaction_info[k] = v[actions.index(action)]
+                    interaction_info["max_"+k] = max(v)
                 else:
                     interaction_info[k] = v
 

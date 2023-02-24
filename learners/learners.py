@@ -42,7 +42,8 @@ class IGWBanditLearner(Learner):
 
     @property
     def params(self) -> Dict[str, Any]:
-        return {"family": "inverse_gap_weighting"}
+        # return {"family": "inverse_gap_weighting"}
+        return {"family": "IGW"}
 
     def predict(self, context: Context, actions: Sequence[Action]) -> Probs:
         valid_contexts = []
@@ -129,7 +130,8 @@ class IGWBanditLearner(Learner):
             pseudodim = pseudodim * np.log(self._X.shape[1])
         else:
             pseudodim = self._A.shape[1] * self._X.shape[1]
-        excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        # excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        excess_risk_bound = self._tuning_parameter * pseudodim / math.pow(self._X.shape[0], self._estimation_rate)
         self._gamma = np.sqrt(self._A.shape[1] / excess_risk_bound)
 
 
@@ -167,7 +169,9 @@ class SemiparametricIGWBanditLearner(Learner):
 
     @property
     def params(self) -> Dict[str, Any]:
-        return {"family": "semiparametric_inverse_gap_weighting"}
+        # return {"family": "semiparametric_inverse_gap_weighting"}
+        return {"family": "SIGW"}
+
 
     def predict(self, context: Context, actions: Sequence[Action]) -> Probs:
         
@@ -227,7 +231,7 @@ class SemiparametricIGWBanditLearner(Learner):
     def _update(self) -> None:
         assert len(self._X) > 0
 
-        if self._do_feature_selection:
+        if True:
             self.model = SparseLinearDML(model_y=Lasso(),
                                         model_t=PropensityModel(self._P),
                                         discrete_treatment=True,
@@ -247,7 +251,8 @@ class SemiparametricIGWBanditLearner(Learner):
         else:
             pseudodim = self._A.shape[1] * self._X.shape[1]
 
-        excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        # excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        excess_risk_bound = self._tuning_parameter * pseudodim / math.pow(self._X.shape[0], self._estimation_rate)
         self._gamma = np.sqrt(self._A.shape[1] / excess_risk_bound)
         
 

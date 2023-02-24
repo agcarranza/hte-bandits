@@ -7,9 +7,11 @@ from coba.learners.primitives import Learner, Probs, Info
 from sklearn.linear_model import LinearRegression, Lasso, LassoCV
 from econml.dml import LinearDML, SparseLinearDML
 
+# from sklearn.preprocessing import normalize
+
 
 class MNA_SIGWBanditLearner(Learner):
-    "MNA: Moving Nusance Adjusted"
+    "MNA: Moving Nuisance Adjusted"
 
     def __init__(self,
                 epoch_schedule:         int   = 0,
@@ -44,7 +46,7 @@ class MNA_SIGWBanditLearner(Learner):
 
     @property
     def params(self) -> Dict[str, Any]:
-        return {"family": "MNA_SIGWBanditLearner"}#"semiparametric_inverse_gap_weighting"}
+        return {"family": "MNA-SIGW"}#"semiparametric_inverse_gap_weighting"}
 
     def predict(self, context: Context, actions: Sequence[Action]) -> Probs:
         
@@ -103,6 +105,7 @@ class MNA_SIGWBanditLearner(Learner):
 
     def _update(self, actions: Sequence[Action]) -> None:
         assert len(self._X) > 0
+        min_samples_per_action = 5
 
         # Estimate model_y
         AvgOutcomeEst = 0
@@ -111,6 +114,9 @@ class MNA_SIGWBanditLearner(Learner):
             X_a = self._X[idx]
             Y_a = self._Y[idx]
             P_a = self._P[:,np.argmax(action)]
+
+            if (X_a.shape[0] < min_samples_per_action):
+                return
 
             if len(Y_a) > 10:
                 # Choose Lasso penalty
@@ -150,7 +156,8 @@ class MNA_SIGWBanditLearner(Learner):
         else:
             pseudodim = self._A.shape[1] * self._X.shape[1]
 
-        excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        # excess_risk_bound = self._tuning_parameter * pseudodim * np.log(math.pow(self._epoch, 2) / self._delta) / math.pow(self._X.shape[0], self._estimation_rate)
+        excess_risk_bound = self._tuning_parameter * pseudodim / math.pow(self._X.shape[0], self._estimation_rate)
         self._gamma = np.sqrt(self._A.shape[1] / excess_risk_bound)
         
 
